@@ -181,6 +181,9 @@ def _main():
     arg_parser.add_argument("-v", "--version", action="version",
                             version=__version__)
 
+    arg_parser.add_argument("-e", "--envvar", action="store_true",
+                            help="Provide SMTP user and password via ENV VARIABLE")
+
     aggregate_reports = []
     forensic_reports = []
 
@@ -306,12 +309,16 @@ def _main():
                 opts.imap_skip_certificate_verification = imap_verify
             if "user" in imap_config:
                 opts.imap_user = imap_config["user"]
+            elif os.getenv("IMAP_USER"):
+                opts.imap_user = os.getenv("IMAP_USER")
             else:
                 logger.critical("user setting missing from the "
                                 "imap config section")
                 exit(-1)
             if "password" in imap_config:
                 opts.imap_password = imap_config["password"]
+            elif os.getenv("IMAP_PASSWORD"):
+                opts.imap_password = os.getenv("IMAP_PASSWORD")
             else:
                 logger.critical("password setting missing from the "
                                 "imap config section")
