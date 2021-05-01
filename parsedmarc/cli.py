@@ -289,9 +289,11 @@ def _main():
                 opts.chunk_size = general_config.getint("chunk_size")
         if "imap" in config.sections():
             imap_config = config["imap"]
-            if "host" in imap_config:
+            if os.getenv("IMAP_HOST"):
+                opts.imap_host = os.getenv("IMAP_HOST")
+            elif "host" in imap_config:
                 opts.imap_host = imap_config["host"]
-            else:
+                        else:
                 logger.error("host setting missing from the "
                              "imap config section")
                 exit(-1)
@@ -307,18 +309,19 @@ def _main():
                 imap_verify = imap_config.getboolean(
                     "skip_certificate_verification")
                 opts.imap_skip_certificate_verification = imap_verify
-            if "user" in imap_config:
-                opts.imap_user = imap_config["user"]
-            elif os.getenv("IMAP_USER"):
+            if os.getenv("IMAP_USER"):
                 opts.imap_user = os.getenv("IMAP_USER")
+            elif "user" in imap_config:
+                opts.imap_user = imap_config["user"]
             else:
                 logger.critical("user setting missing from the "
                                 "imap config section")
                 exit(-1)
-            if "password" in imap_config:
-                opts.imap_password = imap_config["password"]
-            elif os.getenv("IMAP_PASSWORD"):
+            if os.getenv("IMAP_PASSWORD"):
                 opts.imap_password = os.getenv("IMAP_PASSWORD")
+            elif "password" in imap_config:
+                opts.imap_password = imap_config["password"]
+            
             else:
                 logger.critical("password setting missing from the "
                                 "imap config section")
