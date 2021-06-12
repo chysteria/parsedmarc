@@ -293,7 +293,7 @@ def _main():
                 opts.imap_host = os.getenv("IMAP_HOST")
             elif "host" in imap_config:
                 opts.imap_host = imap_config["host"]
-                        else:
+            else:
                 logger.error("host setting missing from the "
                              "imap config section")
                 exit(-1)
@@ -327,9 +327,13 @@ def _main():
                                 "imap config section")
                 exit(-1)
 
-            if "reports_folder" in imap_config:
+            if os.getenv("IMAP_WATCH_FOLDER"):
+                opts.imap_reports_folder = os.getenv("IMAP_WATCH_FOLDER")
+            elif "reports_folder" in imap_config:
                 opts.imap_reports_folder = imap_config["reports_folder"]
-            if "archive_folder" in imap_config:
+            if os.getenv("IMAP_ARCHIVE_FOLDER"):
+                opts.imap_reports_folder = os.getenv("IMAP_ARCHIVE_FOLDER")
+            elif "archive_folder" in imap_config:
                 opts.imap_archive_folder = imap_config["archive_folder"]
             if "watch" in imap_config:
                 opts.imap_watch = imap_config.getboolean("watch")
